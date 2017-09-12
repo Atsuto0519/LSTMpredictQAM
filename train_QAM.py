@@ -11,6 +11,7 @@ import sys
 # import cPickle
 import numpy as np
 import matplotlib.pyplot as plt
+from make_data import *
 from sigpy import Make_Step, Quadrature_Amplitude_Modulation
 
 # モデルの宣言
