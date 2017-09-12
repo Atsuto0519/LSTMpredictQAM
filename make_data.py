@@ -15,7 +15,7 @@ class DataMaker(object):
         self.steps_per_cycle = steps_per_cycle
         self.number_of_cycles = number_of_cycles
 
-    def make(self, signal, t):
+    def make(self, signal):
         return np.array(Quadrature_Amplitude_Modulation(signal, self.number_of_cycles, np.arange(0, self.steps_per_cycle, 1)))
 
     def make_mini_batch(self, data, mini_batch_size, length_of_sequence):
