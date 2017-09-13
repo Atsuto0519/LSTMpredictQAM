@@ -64,7 +64,7 @@ def compute_loss(model, sequences):
 random.seed(0)
 
 # Nは周波数fcの信号の周期を何分割するか
-N=50
+N=48
 # 搬送波の周波数
 fc = 1
 
@@ -88,19 +88,12 @@ if __name__ == "__main__":
 
     # QAMで信号化したいビット列
     signal = []
-    for i in range(STEPS_PER_CYCLE * NUMBER_OF_CYCLES) :
+    for i in range(NUMBER_OF_CYCLES) :
         signal.append(random.random()%8)
 
     # make training data
     data_maker = DataMaker(steps_per_cycle=STEPS_PER_CYCLE, number_of_cycles=NUMBER_OF_CYCLES)
     train_data = data_maker.make(signal)
-
-    # plt.title("QAM")
-    # plt.ylim(min(train_data)-0.2, max(train_data)+0.2)
-    # plt.plot(range(len(train_data)),train_data)
-
-    # plt.show()
-
 
     # setup model
     model = LSTM(IN_UNITS, HIDDEN_UNITS, OUT_UNITS)
@@ -144,6 +137,6 @@ if __name__ == "__main__":
     end = time.time()
 
     # save model
-    cPickle.dump(model, open("./model.pkl", "wb"))
+    cPickle.dump(model, open("./qam_model.pkl", "wb"))
 
     print("{}[sec]".format(end - start))
