@@ -23,3 +23,4 @@ class DataMaker(object):
         for i in range(mini_batch_size):
             index = random.randint(0, len(data) - length_of_sequence)
             sequences[i] = data[index:index+length_of_sequence]
+        return sequences

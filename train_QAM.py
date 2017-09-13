@@ -6,9 +6,11 @@ import chainer.links as L
 import chainer.functions as F
 import numpy as np
 from chainer import optimizers, cuda
+import argparse
+import random
 import time
 import sys
-# import cPickle
+import _pickle as cPickle
 import numpy as np
 import matplotlib.pyplot as plt
 from make_data import *
@@ -59,16 +61,12 @@ def compute_loss(model, sequences):
         loss += model(x, t)
     return loss
 
+random.seed(0)
 
 # Nは周波数fcの信号の周期を何分割するか
-N=64
+N=50
 # 搬送波の周波数
-fc = 2
-# QAMで信号化したいビット列
-letter=['001','100','000','011','101','110']
-signal=[]
-for i in letter :
-   signal.append(int(i,2))
+fc = 1
 
 # ここからLSTM
 IN_UNITS = 1
@@ -76,24 +74,32 @@ HIDDEN_UNITS = 5
 OUT_UNITS = 1
 TRAINING_EPOCHS = 4000
 DISPLAY_EPOCH = 10
-MINI_BATCH_SIZE = len(signal)
-LENGTH_OF_SEQUENCE = fc
+MINI_BATCH_SIZE = 100
+LENGTH_OF_SEQUENCE = 100
 STEPS_PER_CYCLE = N
-NUMBER_OF_CYCLES = fc
-
-xp = cuda.cupy
+NUMBER_OF_CYCLES = 100
 
 if __name__ == "__main__":
+    # 引数の処理
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--gpu', '-g', default=-1, type=int,
+                        help='GPU ID (negative value indicates CPU)')
+    args = parser.parse_args()
+
+    # QAMで信号化したいビット列
+    signal = []
+    for i in range(STEPS_PER_CYCLE * NUMBER_OF_CYCLES) :
+        signal.append(random.random()%8)
 
     # make training data
     data_maker = DataMaker(steps_per_cycle=STEPS_PER_CYCLE, number_of_cycles=NUMBER_OF_CYCLES)
     train_data = data_maker.make(signal)
 
-    plt.title("QAM")
-    plt.ylim(min(train_data)-0.2, max(train_data)+0.2)
-    plt.plot(range(len(train_data)),train_data)
+    # plt.title("QAM")
+    # plt.ylim(min(train_data)-0.2, max(train_data)+0.2)
+    # plt.plot(range(len(train_data)),train_data)
 
-    plt.show()
+    # plt.show()
 
 
     # setup model
@@ -102,7 +108,11 @@ if __name__ == "__main__":
         data = param.data
         data[:] = np.random.uniform(-0.1, 0.1, data.shape)
 
-    model.to_gpu()
+    # cuda環境では以下のようにすればよい
+    xp = cuda.cupy if args.gpu >= 0 else np
+    if args.gpu >= 0:
+        chainer.cuda.get_device(args.gpu).use()
+        model.to_gpu()
 
     # setup optimizer
     optimizer = optimizers.Adam()
