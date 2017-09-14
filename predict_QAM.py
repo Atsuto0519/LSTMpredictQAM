@@ -20,7 +20,7 @@ PREDICTION_PATH = "./prediction_5.txt"
 INITIAL_PATH = "./initial.txt"
 MINI_BATCH_SIZE = 100
 LENGTH_OF_SEQUENCE = 100
-STEPS_PER_CYCLE = 50
+STEPS_PER_CYCLE = 48
 NUMBER_OF_CYCLES = 100
 
 
@@ -92,11 +92,11 @@ if __name__ == "__main__":
     signal = []
     for i in range(NUMBER_OF_CYCLES) :
         signal.append(random.random()%8)
-    
+
     # make data
     data_maker = DataMaker(steps_per_cycle=STEPS_PER_CYCLE, number_of_cycles=NUMBER_OF_CYCLES)
     data = data_maker.make(signal)
     sequences = data_maker.make_mini_batch(data, mini_batch_size=MINI_BATCH_SIZE, length_of_sequence=LENGTH_OF_SEQUENCE)
-    
+
     sample_index = 45
     predict(sequences[sample_index], model, PREDICTION_LENGTH, INITIAL_PATH, PREDICTION_PATH)
