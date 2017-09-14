@@ -15,7 +15,7 @@ random.seed(0)
 
 MODEL_PATH = "./qam_model.pkl"
 PICTURE_PATH = "./prediction_qam.png"
-PREDICTION_LENGTH = 75
+PREDICTION_LENGTH = 50
 PREDICTION_PATH = "./prediction_5.txt"
 INITIAL_PATH = "./initial.txt"
 MINI_BATCH_SIZE = 100
@@ -36,7 +36,7 @@ def predict_sequence(model, input_seq, output_seq, dummy):
 
 def predict(seq, model, pre_length, initial_path, prediction_path):
     # initial sequence
-    input_seq = np.array(seq[:int(seq.shape[0]/4)])
+    input_seq = np.array(seq[:int(seq.shape[0]/2)])
 
     output_seq = np.empty(0)
 
@@ -67,7 +67,7 @@ def predict(seq, model, pre_length, initial_path, prediction_path):
     # plot with matplotlib
     prediction_plot = np.array(prediction_plot).T
     initial_plot = np.array(initial_plot).T
-    plt.plot(initial_plot[0], initial_plot[1], label='sin wave')
+    plt.plot(initial_plot[0], initial_plot[1], label='QAM wave')
     plt.plot(prediction_plot[0], prediction_plot[1], label='prediction')
     plt.legend()
     plt.grid()
