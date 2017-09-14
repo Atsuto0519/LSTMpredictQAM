@@ -10,7 +10,7 @@ import argparse
 import random
 import time
 import sys
-import _pickle as cPickle
+import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 from make_data import *
@@ -69,6 +69,7 @@ N=48
 fc = 1
 
 # ここからLSTM
+MODEL_PATH = "./qam_model.pkl"
 IN_UNITS = 1
 HIDDEN_UNITS = 5
 OUT_UNITS = 1
@@ -137,6 +138,7 @@ if __name__ == "__main__":
     end = time.time()
 
     # save model
-    cPickle.dump(model, open("./qam_model.pkl", "wb"))
+    with open(MODEL_PATH, mode='wb') as f :
+        pickle.dump(model, f)
 
     print("{}[sec]".format(end - start))
