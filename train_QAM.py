@@ -1,44 +1,37 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import chainer
-import chainer.links as L
-import chainer.functions as F
+from make_data import *
+from lstm import *
 import numpy as np
 from chainer import optimizers, cuda
 import argparse
 import random
 import time
 import sys
-import pickle
+import _pickle as cPickle
 import numpy as np
 import matplotlib.pyplot as plt
-from make_data import *
 from sigpy import Make_Step, Quadrature_Amplitude_Modulation
 
-# モデルの宣言
-class LSTM(chainer.Chain):
-    def __init__(self, in_units=1, hidden_units=2, out_units=1, train=True):
-        super(LSTM, self).__init__(
-            l1=L.Linear(in_units, hidden_units),
-            l2=L.LSTM(hidden_units, hidden_units),
-            l3=L.Linear(hidden_units, out_units),
-        )
-        self.train = True
+random.seed(0)
 
-    def __call__(self, x, t):
-        h = self.l1(x)
-        h = self.l2(h)
-        y = self.l3(h)
-        self.loss = F.mean_squared_error(y, t)
-        if self.train:
-            return self.loss
-        else:
-            self.prediction = y
-            return self.prediction
+# Nは周波数fcの信号の周期を何分割するか
+N=48
+# 搬送波の周波数
+fc = 1
 
-    def reset_state(self):
-        self.l2.reset_state()
+# ここからLSTM
+MODEL_PATH = "./qam_model.pkl"
+IN_UNITS = 1
+HIDDEN_UNITS = 5
+OUT_UNITS = 1
+TRAINING_EPOCHS = 40
+DISPLAY_EPOCH = 10
+MINI_BATCH_SIZE = 100
+LENGTH_OF_SEQUENCE = 100
+STEPS_PER_CYCLE = N
+NUMBER_OF_CYCLES = 100
 
 # 誤差計算関数
 def compute_loss(model, sequences):
@@ -61,24 +54,6 @@ def compute_loss(model, sequences):
         loss += model(x, t)
     return loss
 
-random.seed(0)
-
-# Nは周波数fcの信号の周期を何分割するか
-N=48
-# 搬送波の周波数
-fc = 1
-
-# ここからLSTM
-MODEL_PATH = "./qam_model.pkl"
-IN_UNITS = 1
-HIDDEN_UNITS = 5
-OUT_UNITS = 1
-TRAINING_EPOCHS = 4000
-DISPLAY_EPOCH = 10
-MINI_BATCH_SIZE = 100
-LENGTH_OF_SEQUENCE = 100
-STEPS_PER_CYCLE = N
-NUMBER_OF_CYCLES = 100
 
 if __name__ == "__main__":
     # 引数の処理
@@ -138,7 +113,6 @@ if __name__ == "__main__":
     end = time.time()
 
     # save model
-    with open(MODEL_PATH, mode='wb') as f :
-        pickle.dump(model, f)
+    cPickle.dump(model, open("./qam_model.pkl", "wb"))
 
     print("{}[sec]".format(end - start))
