@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 
 import numpy as np
+from numpy.random import *
 import math
 import random
 from sigpy import Quadrature_Amplitude_Modulation
@@ -18,14 +19,13 @@ class DataMaker(object):
     def make(self, signal, *, noise=False):
         tmp = np.array(Quadrature_Amplitude_Modulation(signal, 1, np.arange(0, self.steps_per_cycle, 1)))
         res = []
-        # 平均0，分散1のホワイトノイズを付与
+        # 平均0，分散0.05のホワイトノイズを付与
         if (noise == True) :
-            for i in res :
-                res.append(i + np.random.randn())
+            for i in tmp :
+                res.append(i + normal(0,0.05))
         else :
             res = tmp
         return res
-
 
     def make_mini_batch(self, data, mini_batch_size, length_of_sequence):
         sequences = np.ndarray((mini_batch_size, length_of_sequence), dtype=np.float32)

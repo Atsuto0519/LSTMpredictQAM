@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     # make training data
     data_maker = DataMaker(steps_per_cycle=STEPS_PER_CYCLE, number_of_cycles=NUMBER_OF_CYCLES)
-    train_data = data_maker.make(signal)
+    train_data = data_maker.make(signal,noise=True)
 
     # setup model
     model = LSTM(IN_UNITS, HIDDEN_UNITS, OUT_UNITS)

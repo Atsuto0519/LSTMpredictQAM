@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
     # make data
     data_maker = DataMaker(steps_per_cycle=STEPS_PER_CYCLE, number_of_cycles=NUMBER_OF_CYCLES)
-    data = data_maker.make(signal)
+    data = data_maker.make(signal,noise=True)
     sequences = data_maker.make_mini_batch(data, mini_batch_size=MINI_BATCH_SIZE, length_of_sequence=LENGTH_OF_SEQUENCE)
 
     sample_index = 45
