@@ -16,14 +16,27 @@ class DataMaker(object):
         self.steps_per_cycle = steps_per_cycle
         self.number_of_cycles = number_of_cycles
 
-    def make(self, signal, *, noise=False):
+    def make(self, signal, *, regulary=False, noise=False):
+        # データに規則性を付与する
+        if (regulary == True) :
+            print("regulary:on")
+            # 4('100')の後は必ず1('001')が出現するようにsignalを変更
+            for i in range(len(signal)) :
+                if (signal[i] == 4 and i != len(signal)-1) :
+                    signal[i+1] = 1
+        else ;
+            print("regulary:off")
+
+
         tmp = np.array(Quadrature_Amplitude_Modulation(signal, 1, np.arange(0, self.steps_per_cycle, 1)))
         res = []
         # 平均0，分散0.05のホワイトノイズを付与
         if (noise == True) :
+            print("noise:on")
             for i in tmp :
                 res.append(i + normal(0,0.05))
         else :
+            print("noise:off")
             res = tmp
         return res
 
