@@ -13,7 +13,7 @@ from make_data import *
 
 random.seed(0)
 
-MODEL_PATH = "./qam_model.pkl"
+MODEL_PATH = "./qam_model_with_option.pkl"
 PICTURE_PATH = "./prediction_qam.png"
 PREDICTION_LENGTH = 50
 PREDICTION_PATH = "./prediction_5.txt"
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     signal = []
     for i in range(NUMBER_OF_CYCLES) :
-        signal.append(random.random()%8)
+        signal.append(random.randint(0,7))
 
     # make data
     data_maker = DataMaker(steps_per_cycle=STEPS_PER_CYCLE, number_of_cycles=NUMBER_OF_CYCLES)
