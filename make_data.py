@@ -24,7 +24,7 @@ class DataMaker(object):
             for i in range(len(signal)) :
                 if (signal[i] == 4 and i != len(signal)-1) :
                     signal[i+1] = 1
-        else ;
+        else :
             print("regulary:off")
 
 
