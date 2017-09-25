@@ -22,11 +22,11 @@ N=48
 fc = 1
 
 # ここからLSTM
-MODEL_PATH = "./qam_model.pkl"
+MODEL_PATH = "./qam_model_with_option.pkl"
 IN_UNITS = 1
 HIDDEN_UNITS = 5
 OUT_UNITS = 1
-TRAINING_EPOCHS = 4000
+TRAINING_EPOCHS = 5000
 DISPLAY_EPOCH = 10
 MINI_BATCH_SIZE = 100
 LENGTH_OF_SEQUENCE = 100
@@ -113,6 +113,6 @@ if __name__ == "__main__":
     end = time.time()
 
     # save model
-    cPickle.dump(model, open("./qam_model.pkl", "wb"))
+    cPickle.dump(model, open(MODEL_PATH, "wb"))
 
     print("{}[sec]".format(end - start))
