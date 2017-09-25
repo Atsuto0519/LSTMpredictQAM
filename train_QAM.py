@@ -64,8 +64,8 @@ if __name__ == "__main__":
 
     # QAMで信号化したいビット列
     signal = []
-    for i in range(NUMBER_OF_CYCLES) :
-        signal.append(random.random()%8)
+    for i in range(1000) :
+        signal.append(random.randint(0,7))
 
     # make training data
     data_maker = DataMaker(steps_per_cycle=STEPS_PER_CYCLE, number_of_cycles=NUMBER_OF_CYCLES)
