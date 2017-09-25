@@ -15,8 +15,17 @@ class DataMaker(object):
         self.steps_per_cycle = steps_per_cycle
         self.number_of_cycles = number_of_cycles
 
-    def make(self, signal):
-        return np.array(Quadrature_Amplitude_Modulation(signal, 1, np.arange(0, self.steps_per_cycle, 1)))
+    def make(self, signal, *, noise=False):
+        tmp = np.array(Quadrature_Amplitude_Modulation(signal, 1, np.arange(0, self.steps_per_cycle, 1)))
+        res = []
+        # 平均0，分散1のホワイトノイズを付与
+        if (noise == True) :
+            for i in res :
+                res.append(i + np.random.randn())
+        else :
+            res = tmp
+        return res
+
 
     def make_mini_batch(self, data, mini_batch_size, length_of_sequence):
         sequences = np.ndarray((mini_batch_size, length_of_sequence), dtype=np.float32)
